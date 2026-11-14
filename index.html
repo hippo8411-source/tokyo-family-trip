@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇宸的東京生日旅行</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- App 標題 -->
+    <header>
+        <h1>🎂 宇宸的東京生日旅行</h1>
+        <h2>2026.12.06 - 12.12</h2>
+    </header>
+
+    
+<!-- 旅行倒數 -->
+<section class="countdown">
+    <h3>✈️ 距離東京出發還有</h3>
+
+    <div id="countdown-number">
+
+        <div class="time-box">
+            <span id="days">--</span>
+            <small>天</small>
+        </div>
+
+        <div class="time-box">
+            <span id="hours">--</span>
+            <small>時</small>
+        </div>
+
+        <div class="time-box">
+            <span id="minutes">--</span>
+            <small>分</small>
+        </div>
+
+        <div class="time-box">
+            <span id="seconds">--</span>
+            <small>秒</small>
+        </div>
+
+    </div>
+</section>
+
+
+    <!-- 今日行程 -->
+
+<!-- 每日行程 -->
+<section class="today">
+    <h3>📅 每日行程</h3>
+
+    <button type="button" onclick="showDay('12/06')">
+        ✈️ 12/06（日）抵達東京・錦糸町
+    </button>
+
+    <button type="button" onclick="showDay('12/07')">
+        🏮 12/07（一）淺草・晴空塔
+    </button>
+
+    <button type="button" onclick="showDay('12/08')">
+        🎂 12/08（二）宇宸6歲生日
+    </button>
+
+    <button type="button" onclick="showDay('12/09')">
+        ❄️ 12/09（三）輕井澤玩雪
+    </button>
+
+    <button type="button" onclick="showDay('12/10')">
+        🖍️ 12/10（四）春日部・蠟筆小新
+    </button>
+
+    <button type="button" onclick="showDay('12/11')">
+        ⚡ 12/11（五）池袋・原宿
+    </button>
+
+    <button type="button" onclick="showDay('12/12')">
+        ✈️ 12/12（六）返回台灣
+    </button>
+</section>
+
+
+<!-- 12/7 淺草、晴空塔詳細行程 -->
+
+<!-- 七天共用的詳細行程頁面 -->
+<section id="day-detail-page" hidden>
+
+    <h2 id="day-detail-title">每日詳細行程</h2>
+
+    <h3>📍 今日行程</h3>
+
+    <div id="day-detail-places">
+        <!-- JavaScript 會自動產生景點內容 -->
+    </div>
+
+    <button type="button" onclick="goHome()">
+        ← 返回每日行程
+    </button>
+
+</section>
+<!-- 12/8 生日詳細頁面 -->
+
+    <!-- 底部選單 -->
+    <nav>
+        <button type="button">🏠 首頁</button>
+        <button type="button">📅 行程</button>
+        <button type="button">🗺️ 地圖</button>
+        <button type="button">⚙️ 工具</button>
+    </nav>
+<script src="script.js"></script>
+</body>
+</html>
