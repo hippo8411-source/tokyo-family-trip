@@ -104,10 +104,6 @@ nav button {
     cursor: pointer;
 }
 
-nav button:first-child {
-    color: #2563eb;
-    font-weight: bold;
-}
 
 /* 6. 電腦螢幕寬度限制 */
 @media (min-width: 600px) {
@@ -340,4 +336,99 @@ nav button:first-child {
 .map-button:focus-visible {
     outline: 2px solid #2563eb;
     outline-offset: 2px;
+}
+
+/* 第59步：交通資訊頁面 */
+
+#transport-page {
+    padding: 16px;
+    padding-bottom: 90px;
+}
+
+#transport-page h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #1d4ed8;
+}
+
+.transport-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.transport-card h3 {
+    font-size: 17px;
+    color: #1e40af;
+    margin: 0 0 12px;
+}
+
+.transport-card p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #475569;
+    margin: 8px 0;
+}
+
+#transport-page > button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 交通頁面：可展開的搭車教學 */
+.transport-guide {
+    margin-top: 16px;
+    padding: 12px;
+    background: #fff4e6;
+border: 1px solid #ffd8a8;
+    border-radius: 12px;
+}
+
+.transport-guide summary {
+    color: #b45309;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1.6;
+}
+
+.transport-guide[open] summary {
+    margin-bottom: 12px;
+}
+
+.transport-guide ol {
+    padding-left: 24px;
+    margin: 8px 0 16px;
+}
+
+.transport-guide li {
+    margin-bottom: 12px;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.transport-guide p {
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 10px 0;
+}
+
+.transport-guide p[lang="ja"] {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
 }
