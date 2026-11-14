@@ -270,3 +270,16 @@ const mapLocations = {
     "表參道": "表参道駅"
 };
 
+ // 註冊離線功能
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+        navigator.serviceWorker.register("./service-worker.js")
+            .then(function() {
+                console.log("離線功能註冊成功");
+            })
+            .catch(function(error) {
+                console.error("離線功能註冊失敗：", error);
+            });
+    });
+}
+
