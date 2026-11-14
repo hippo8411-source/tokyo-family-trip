@@ -219,11 +219,12 @@ day.places.forEach(function(place) {
 
         const destination = mapLocations[name];
 
-        mapLink.href =
-            "https://www.google.com/maps/dir/?api=1" +
-            "&destination=" +
-            encodeURIComponent(destination) +
-            "&travelmode=transit";
+
+mapLink.href =
+    "https://www.google.com/maps/search/?api=1" +
+    "&query=" +
+    encodeURIComponent(destination);
+
 
         mapLink.target = "_blank";
         mapLink.rel = "noopener noreferrer";
