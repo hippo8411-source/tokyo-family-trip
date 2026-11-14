@@ -83,9 +83,23 @@ function goHome() {
 
     // 隱藏共用詳細行程頁面
     document.getElementById("day-detail-page").hidden = true;
-
+document.getElementById("transport-page").hidden = true;
     // 顯示首頁七天行程
     document.querySelector(".today").hidden = false;
+
+}
+
+/* 開啟交通資訊頁面 */
+function showTransport() {
+
+    // 隱藏首頁七天行程
+    document.querySelector(".today").hidden = true;
+
+    // 隱藏每日詳細行程
+    document.getElementById("day-detail-page").hidden = true;
+
+    // 顯示交通資訊頁面
+    document.getElementById("transport-page").hidden = false;
 
 }
 
