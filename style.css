@@ -432,3 +432,81 @@ border: 1px solid #ffd8a8;
     line-height: 1.8;
     overflow-wrap: anywhere;
 }
+/* 地圖頁面分類卡片 */
+.map-category {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    margin: 16px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border-left: 4px solid #5b8def;
+}
+
+.map-category h3 {
+    margin: 0 0 12px;
+    color: #24344d;
+    font-size: 17px;
+}
+
+.map-category p {
+    margin: 0;
+    color: #52627a;
+    font-size: 14px;
+    line-height: 1.7;
+}
+/* 地圖頁面 Google Maps 導航按鈕 */
+.map-category a {
+    display: block;
+    background: #2563eb;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px 12px;
+    margin-top: 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 48px;
+    box-sizing: border-box;
+}
+
+.map-category a:active {
+    background: #1d4ed8;
+}
+/* 地圖分類：展開與收合標題 */
+.map-category summary {
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: bold;
+    color: #24344d;
+    padding: 8px 4px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+}
+
+/* 隱藏瀏覽器原本的小三角形 */
+.map-category summary::-webkit-details-marker {
+    display: none;
+}
+
+/* 自訂展開箭頭 */
+.map-category summary::after {
+    content: "⌄";
+    font-size: 24px;
+    color: #64748b;
+    margin-left: 12px;
+    transition: transform 0.2s;
+}
+
+/* 展開時箭頭轉向 */
+.map-category[open] summary::after {
+    transform: rotate(180deg);
+}
+
+/* 展開後的內容與標題保持距離 */
+.map-category[open] summary {
+    margin-bottom: 10px;
+}

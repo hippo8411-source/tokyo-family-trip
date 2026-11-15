@@ -54,8 +54,7 @@
     <!-- 今日行程 -->
 
 <!-- 每日行程 -->
-<section class="today">
-    <h3>📅 每日行程</h3>
+<section class="today" id="itinerary-list">    <h3>📅 每日行程</h3>
 
     <button type="button" onclick="showDay('12/06')">
         ✈️ 12/06（日）抵達東京・錦糸町
@@ -105,8 +104,97 @@
     </button>
 
 </section>
+<!-- 地圖頁面 -->
+<!-- 地圖頁面 -->
+<section id="map-page" hidden>
+    <h2>🗺️ 東京旅行地圖</h2>
+    <p>點選目的地，即可開啟 Google Maps 導航。</p>
 
-<!-- 第59步：交通資訊頁面 -->
+<details class="map-category">
+    <summary>🏠 住宿與重要車站</summary><p>錦糸町住宿、JR 錦糸町站</p>
+
+<a href="https://www.google.com/maps/search/?api=1&query=JR+Kinshicho+Station"
+   target="_blank"
+   rel="noopener noreferrer">
+    📍 開啟 JR 錦糸町站 Google Maps
+</a>    </details>
+
+<details class="map-category">
+    <summary>🎂 景點與購物</summary>
+            <p>淺草雷門、晴空塔、寶可夢咖啡廳、輕井澤等</p>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Kaminarimon+Asakusa+Tokyo"
+   target="_blank"
+   rel="noopener noreferrer">
+    📍 淺草雷門 Google Maps
+</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo+Skytree"
+   target="_blank"
+   rel="noopener noreferrer">
+    📍 東京晴空塔 Google Maps
+</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Pokemon+Center+Skytree+Town"
+   target="_blank"
+   rel="noopener noreferrer">
+    📍 晴空塔寶可夢中心 Google Maps
+</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Pokemon+Center+Tokyo+DX"
+   target="_blank"
+   rel="noopener noreferrer">
+    📍 寶可夢中心 TOKYO DX Google Maps
+</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Karuizawa+Prince+Hotel+Ski+Resort"
+   target="_blank"
+   rel="noopener noreferrer">
+    📍 輕井澤王子滑雪場 Google Maps
+</a><!-- 12/7 淺草 -->
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Flower+Miffy+Asakusa"
+   target="_blank" rel="noopener noreferrer">
+    📍 Flower Miffy 淺草
+</a>
+
+<!-- 12/10 春日部 -->
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Kasukabe+Station"
+   target="_blank" rel="noopener noreferrer">
+    📍 春日部站
+</a>
+
+<!-- 12/11 池袋 -->
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Pokemon+Center+Mega+Tokyo"
+   target="_blank" rel="noopener noreferrer">
+    📍 寶可夢中心 MEGA TOKYO
+</a>
+
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Pikachu+Sweets+Ikebukuro"
+   target="_blank" rel="noopener noreferrer">
+    📍 Pikachu Sweets
+</a>
+
+<!-- 12/11 原宿 -->
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Topologie+Harajuku+Tokyo"
+   target="_blank" rel="noopener noreferrer">
+    📍 Topologie 原宿
+</a>
+
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Omotesando+Tokyo"
+   target="_blank" rel="noopener noreferrer">
+    📍 表參道
+</a>
+    </details>
+
+<details class="map-category">
+    <summary>🚉 交通樞紐</summary><p>機場、新幹線與重要轉乘車站</p>
+
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Narita+Airport+Terminal+2"
+   target="_blank" rel="noopener noreferrer">
+    📍 成田機場第二航廈
+</a>
+
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Tokyo+Station"
+   target="_blank" rel="noopener noreferrer">
+    📍 JR 東京站
+</a>
+
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Karuizawa+Station"
+   target="_blank" rel="noopener noreferrer">
+    📍 JR 輕井澤站
+</a>    </details>
+</section><!-- 第59步：交通資訊頁面 -->
 <section id="transport-page" hidden>
 
     <h2>🚆 東京交通資訊</h2>
@@ -322,8 +410,8 @@
         
 <button type="button" onclick="goHome()">🏠 首頁</button>
 
-        <button type="button">📅 行程</button>
-        <button type="button">🗺️ 地圖</button>
+<button type="button" onclick="showItinerary()">🗓️ 行程</button>        
+<button type="button" onclick="showMap()">🗺️ 地圖</button>
 <button type="button" onclick="showTransport()">🚆 交通</button>
         <button type="button">⚙️ 工具</button>
     </nav>

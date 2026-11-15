@@ -84,11 +84,22 @@ function goHome() {
     // 隱藏共用詳細行程頁面
     document.getElementById("day-detail-page").hidden = true;
 document.getElementById("transport-page").hidden = true;
+document.getElementById("map-page").hidden = true;
     // 顯示首頁七天行程
     document.querySelector(".today").hidden = false;
 
 }
+/* 顯示每日行程列表 */
+function showItinerary() {
+    // 先回到每日行程頁面
+    goHome();
 
+    // 再捲動到每日行程列表
+    document.getElementById("itinerary-list").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
 /* 開啟交通資訊頁面 */
 function showTransport() {
 
@@ -97,12 +108,28 @@ function showTransport() {
 
     // 隱藏每日詳細行程
     document.getElementById("day-detail-page").hidden = true;
-
+document.getElementById("map-page").hidden = true;
     // 顯示交通資訊頁面
     document.getElementById("transport-page").hidden = false;
 
 }
+/* 開啟地圖頁面 */
+function showMap() {
+    // 隱藏每日行程列表
+    document.querySelector(".today").hidden = true;
 
+    // 隱藏每日詳細行程
+    document.getElementById("day-detail-page").hidden = true;
+
+    // 隱藏交通頁面
+    document.getElementById("transport-page").hidden = true;
+
+    // 顯示地圖頁面
+    document.getElementById("map-page").hidden = false;
+
+    // 回到頁面頂端
+    window.scrollTo(0, 0);
+}
 
 /* 2026 東京旅行：七天行程資料 */
 
