@@ -85,6 +85,7 @@ function goHome() {
     document.getElementById("day-detail-page").hidden = true;
 document.getElementById("transport-page").hidden = true;
 document.getElementById("map-page").hidden = true;
+document.getElementById("tools-page").hidden = true;
     // 顯示首頁七天行程
     document.querySelector(".today").hidden = false;
 
@@ -109,6 +110,7 @@ function showTransport() {
     // 隱藏每日詳細行程
     document.getElementById("day-detail-page").hidden = true;
 document.getElementById("map-page").hidden = true;
+document.getElementById("tools-page").hidden = true;
     // 顯示交通資訊頁面
     document.getElementById("transport-page").hidden = false;
 
@@ -123,11 +125,27 @@ function showMap() {
 
     // 隱藏交通頁面
     document.getElementById("transport-page").hidden = true;
-
+document.getElementById("tools-page").hidden = true;
     // 顯示地圖頁面
     document.getElementById("map-page").hidden = false;
 
     // 回到頁面頂端
+    window.scrollTo(0, 0);
+}
+    /* 開啟旅行工具頁面 */
+function showTools() {
+    // 隱藏每日行程列表
+    document.querySelector(".today").hidden = true;
+
+    // 隱藏其他頁面
+    document.getElementById("day-detail-page").hidden = true;
+    document.getElementById("transport-page").hidden = true;
+    document.getElementById("map-page").hidden = true;
+
+    // 顯示工具頁面
+    document.getElementById("tools-page").hidden = false;
+
+    // 回到頁面最上方
     window.scrollTo(0, 0);
 }
 
@@ -210,7 +228,7 @@ const tripDays = {
 /* 顯示指定日期的詳細行程 */
 
 function showDay(date) {
-
+document.getElementById("tools-page").hidden = true;
     // 取得指定日期的行程資料
     const day = tripDays[date];
 
@@ -324,3 +342,181 @@ if ("serviceWorker" in navigator) {
     });
 }
 
+/* 行李整理表：自動保存勾選紀錄 */
+/* 行李整理表：自動保存與進度計算 */
+function setupPackingList() {
+    const checkboxes = document.querySelectorAll(
+        '#packing-list input[type="checkbox"]'
+    );
+
+    const progressText = document.getElementById('packing-progress-text');
+    const progressBar = document.getElementById('packing-progress-bar');
+
+    // 更新行李準備進度
+    function updatePackingProgress() {
+        const total = checkboxes.length;
+        const completed = Array.from(checkboxes).filter(
+            checkbox => checkbox.checked
+        ).length;
+
+        const percent = total === 0
+            ? 0
+            : Math.round(completed / total * 100);
+
+        progressText.textContent =
+            `${completed} / ${total}（${percent}%）`;
+
+        progressBar.max = total;
+        progressBar.value = completed;
+    }
+
+    checkboxes.forEach((checkbox, index) => {
+        const key = 'tokyo-packing-' + index;
+
+        // 恢復之前保存的勾選狀態
+        checkbox.checked = localStorage.getItem(key) === 'true';
+
+        // 勾選時自動保存並更新進度
+        checkbox.addEventListener('change', () => {
+            localStorage.setItem(key, checkbox.checked);
+            updatePackingProgress();
+        });
+    });
+
+    // 開啟頁面時先計算一次
+    updatePackingProgress();
+}
+
+setupPackingList();
+// 日本採買備忘錄：新增與保存商品
+const shoppingForm = document.getElementById("shopping-form");
+const shoppingName = document.getElementById("shopping-name");
+const shoppingNote = document.getElementById("shopping-note");
+const shoppingList = document.getElementById("shopping-list");
+const shoppingCount = document.getElementById("shopping-count");
+
+let shoppingItems = JSON.parse(
+    localStorage.getItem("tokyoShoppingItems") || "[]"
+);
+
+function saveShoppingItems() {
+    localStorage.setItem("tokyoShoppingItems", JSON.stringify(shoppingItems));
+}
+
+function renderShoppingItems() {
+    shoppingList.innerHTML = "";
+
+    shoppingItems.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "shopping-item";
+        // 已購買勾選框
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = item.bought;
+
+        checkbox.addEventListener("change", function () {
+            item.bought = checkbox.checked;
+            saveShoppingItems();
+            renderShoppingItems();
+        });
+
+        row.appendChild(checkbox);
+
+        if (item.bought) {
+            row.classList.add("shopping-bought");
+        }
+        const name = document.createElement("strong");
+        name.textContent = item.name;
+        row.appendChild(name);
+
+        if (item.note) {
+            const note = document.createElement("p");
+            note.textContent = item.note;
+            row.appendChild(note);
+        }
+        // 編輯商品按鈕
+const editButton = document.createElement("button");
+editButton.type = "button";
+editButton.textContent = "✏️ 編輯";
+
+editButton.addEventListener("click", function () {
+    const newName = prompt("修改商品名稱：", item.name);
+
+    // 按取消就不修改
+    if (newName === null) return;
+
+    // 商品名稱不能空白
+    if (!newName.trim()) {
+        alert("商品名稱不能空白！");
+        return;
+    }
+
+    const newNote = prompt("修改備註／購買地點：", item.note || "");
+
+    // 按取消就不修改
+    if (newNote === null) return;
+
+    item.name = newName.trim();
+    item.note = newNote.trim();
+
+    saveShoppingItems();
+    renderShoppingItems();
+});
+
+row.appendChild(editButton);
+// 刪除商品按鈕
+const deleteButton = document.createElement("button");
+deleteButton.type = "button";
+deleteButton.textContent = "🗑️ 刪除";
+
+deleteButton.addEventListener("click", function () {
+    if (!confirm(`確定要刪除「${item.name}」嗎？`)) {
+        return;
+    }
+
+    shoppingItems = shoppingItems.filter(
+        shoppingItem => shoppingItem.id !== item.id
+    );
+
+    saveShoppingItems();
+    renderShoppingItems();
+});
+
+row.appendChild(deleteButton);
+        shoppingList.appendChild(row);
+    });
+
+    // 計算採買完成進度
+const total = shoppingItems.length;
+const bought = shoppingItems.filter(item => item.bought).length;
+const percent = total === 0 ? 0 : Math.round(bought / total * 100);
+
+shoppingCount.textContent =
+    total === 0
+        ? "目前尚無商品"
+        : `已買 ${bought} / ${total} 項（${percent}%）`;}
+
+if (shoppingForm) {
+    shoppingForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = shoppingName.value.trim();
+        const note = shoppingNote.value.trim();
+
+        if (!name) return;
+
+        shoppingItems.push({
+            id: Date.now().toString(),
+            name: name,
+            note: note,
+            bought: false
+        });
+
+        saveShoppingItems();
+        renderShoppingItems();
+
+        shoppingForm.reset();
+    });
+
+    renderShoppingItems();
+}

@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "tokyo-family-trip-v1";
+const CACHE_NAME = "tokyo-family-trip-v2";
 
 const FILES_TO_CACHE = [
     "./",

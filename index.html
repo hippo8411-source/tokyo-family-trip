@@ -404,8 +404,88 @@
 </section>
 
 <!-- 12/8 生日詳細頁面 -->
+<!-- 工具頁面 -->
+<section id="tools-page" hidden>
+    <h2>⚙️ 旅行工具</h2>
+    <p>東京旅行的實用小幫手</p>
 
-    <!-- 底部選單 -->
+    <div class="transport-card">
+        <h3>🧳 行李整理表</h3>
+        <p>出發前確認三人的行李是否準備齊全。</p>
+        <p>之後可以直接勾選，並保留整理進度。</p>
+        <div id="packing-progress">
+    <strong>🧳 行李準備進度</strong>
+    <p id="packing-progress-text">0 / 26（0%）</p>
+    <progress id="packing-progress-bar" value="0" max="26"></progress>
+</div>
+    <div id="packing-list">
+    <h4>📄 證件與重要物品</h4>
+    <label><input type="checkbox"> 三人護照</label>
+    <label><input type="checkbox"> 機票與訂位資料</label>
+    <label><input type="checkbox"> 日圓現金</label>
+    <label><input type="checkbox"> 信用卡</label>
+    <label><input type="checkbox"> 旅遊保險資料</label>
+
+    <h4>👕 衣物用品</h4>
+    <label><input type="checkbox"> 大人衣物</label>
+    <label><input type="checkbox"> 宇宸衣物</label>
+    <label><input type="checkbox"> 保暖外套</label>
+    <label><input type="checkbox"> 內衣褲襪</label>
+    <label><input type="checkbox"> 睡衣</label>
+    <h4>🔌 電子用品</h4>
+<label><input type="checkbox"> 手機與充電線</label>
+<label><input type="checkbox"> 充電器與行動電源</label>
+<label><input type="checkbox"> iPad 與充電線</label>
+<label><input type="checkbox"> eSIM 安裝確認</label>
+
+<h4>👦 宇宸專用</h4>
+<label><input type="checkbox"> 兒童牙刷與牙膏</label>
+<label><input type="checkbox"> 宇宸保暖帽與手套</label>
+<label><input type="checkbox"> 宇宸備用衣褲</label>
+<label><input type="checkbox"> 隨身玩具與娛樂用品</label>
+
+<h4>❄️ 輕井澤玩雪用品</h4>
+<label><input type="checkbox"> 防水手套</label>
+<label><input type="checkbox"> 保暖襪</label>
+<label><input type="checkbox"> 防水外套與褲子</label>
+<label><input type="checkbox"> 暖暖包</label>
+
+<h4>🧴 生活與衛生用品</h4>
+<label><input type="checkbox"> 牙刷與個人盥洗用品</label>
+<label><input type="checkbox"> 常備藥品</label>
+<label><input type="checkbox"> 衛生紙與濕紙巾</label>
+<label><input type="checkbox"> 保濕乳液與護唇膏</label>
+</div>
+<!-- 日本採買備忘錄 -->
+<div class="transport-card" id="shopping-card">
+    <h3>🛍️ 日本採買備忘錄</h3>
+    <p>想到想買的商品就記下來，到日本買到後再勾選。</p>
+
+    <form id="shopping-form">
+        <input
+            type="text"
+            id="shopping-name"
+            placeholder="想買什麼？例如：寶可夢玩偶"
+            required
+        >
+
+        <input
+            type="text"
+            id="shopping-note"
+            placeholder="備註／購買地點（選填）"
+        >
+
+        <button type="submit">＋ 新增商品</button>
+    </form>
+
+    <p id="shopping-count">目前尚無商品</p>
+
+    <div id="shopping-list"></div>
+</div>
+    <button type="button" onclick="goHome()">
+        ← 返回首頁
+    </button>
+</section>    <!-- 底部選單 -->
     <nav>
         
 <button type="button" onclick="goHome()">🏠 首頁</button>
@@ -413,8 +493,7 @@
 <button type="button" onclick="showItinerary()">🗓️ 行程</button>        
 <button type="button" onclick="showMap()">🗺️ 地圖</button>
 <button type="button" onclick="showTransport()">🚆 交通</button>
-        <button type="button">⚙️ 工具</button>
-    </nav>
+<button type="button" onclick="showTools()">⚙️ 工具</button>    </nav>
 <script src="script.js"></script>
 </body>
 </html>

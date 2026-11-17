@@ -510,3 +510,159 @@ border: 1px solid #ffd8a8;
 .map-category[open] summary {
     margin-bottom: 10px;
 }
+/* 行李整理表 */
+
+#packing-list {
+    margin-top: 18px;
+}
+
+#packing-list h4 {
+    margin: 20px 0 10px;
+    color: #1e3a5f;
+}
+
+#packing-list label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 8px;
+    margin-bottom: 5px;
+    background: #f3f6fb;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#packing-list input[type="checkbox"] {
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+    accent-color: #2563eb;
+}
+/* 行李整理進度 */
+
+#packing-progress {
+    margin: 18px 0 22px;
+    padding: 14px;
+    background: #eef4ff;
+    border-radius: 10px;
+}
+
+#packing-progress strong {
+    color: #1e3a5f;
+}
+
+#packing-progress-text {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+#packing-progress-bar {
+    display: block;
+    width: 100%;
+    height: 14px;
+    accent-color: #2563eb;
+}
+/* 日本採買備忘錄 */
+#shopping-card {
+    margin-top: 20px;
+}
+
+#shopping-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+#shopping-form input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+#shopping-form button {
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+#shopping-count {
+    font-weight: bold;
+    color: #2563eb;
+    margin: 15px 0;
+}
+
+.shopping-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    flex-wrap: wrap;
+}
+
+.shopping-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    accent-color: #16a34a;
+}
+
+.shopping-item strong {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.shopping-item p {
+    width: 100%;
+    margin: 0 0 0 32px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.shopping-bought {
+    background: #dcfce7;
+}
+
+.shopping-bought strong {
+    text-decoration: line-through;
+    color: #64748b;
+}
+/* 採買備忘錄：編輯與刪除按鈕 */
+.shopping-item button {
+    padding: 7px 10px;
+    font-size: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+    color: #334155;
+    cursor: pointer;
+}
+
+.shopping-item button:hover {
+    background: #e2e8f0;
+}
+
+.shopping-item button:active {
+    background: #cbd5e1;
+}
+/* 採買清單：商品資訊與按鈕分行 */
+.shopping-item strong {
+    flex: 1 1 calc(100% - 40px);
+}
+
+.shopping-item button {
+    flex: 0 0 auto;
+}
+
+.shopping-item button:first-of-type {
+    margin-left: 32px;
+}
