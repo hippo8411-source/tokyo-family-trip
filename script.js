@@ -61,9 +61,329 @@ updateCountdown();
 
 // 之後每隔 1 秒再執行一次
 setInterval(updateCountdown, 1000);
+const TEST_JAPAN_DATE = null;
 
+// 取得今天的日本日期
+function getJapanDate() {
+    if (TEST_JAPAN_DATE !== null) {
+    return TEST_JAPAN_DATE;
+}
+    const today = new Date();
 
+    return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    }).format(today);
+}
+// 判斷今天是旅行第幾天
+function getTripDay() {
+    const japanDate = getJapanDate();
 
+    if (japanDate < "2026-12-06") return 0;
+    if (japanDate > "2026-12-12") return 8;
+
+    const day = Number(japanDate.split("-")[2]);
+
+    return day - 5;
+}
+// 更新智慧首頁的日期與旅行狀態
+function updateSmartHome() {
+    const tripDay = getTripDay();
+    const dateText = document.getElementById("smart-home-date");
+    const title = document.getElementById("smart-home-title");
+
+    if (tripDay === 0) {
+        title.textContent = "🧳 東京旅行準備中";
+        dateText.textContent = "距離出發還有一段時間，準備迎接東京之旅！";
+    } else if (tripDay === 8) {
+        title.textContent = "🏠 東京旅行圓滿結束";
+        dateText.textContent = "宇宸的六歲生日旅行，留下美好的回憶 ❤️";
+    } else {
+        title.textContent = tripDay === 3
+            ? "🎂 宇宸六歲生日快樂！"
+            : "🇯🇵 東京家庭旅行";
+
+        dateText.textContent =
+            `${getJapanDate()}｜旅行第 ${tripDay} 天`;
+    }
+}
+
+updateSmartHome();
+// 智慧首頁：每日行程摘要
+function updateSmartHomePlan() {
+    const tripDay = getTripDay();
+    const plan = document.getElementById("smart-home-plan");
+
+    const dailyPlans = [
+        "✈️ 抵達東京・前往錦糸町住宿",
+        "⛩️ 淺草雷門・仲見世・晴空塔",
+        "🎂 宇宸六歲生日・日本橋寶可夢之旅",
+        "⛄ 輕井澤王子滑雪場・玩雪",
+        "🖍️ 春日部・蠟筆小新之旅",
+        "⚡ 池袋寶可夢中心・原宿",
+        "🛫 前往成田機場・返回台灣"
+    ];
+
+    if (tripDay === 0) {
+        plan.innerHTML = `
+            <h3>📍 今日行程</h3>
+            <p>旅行尚未開始，12/6 即將出發！</p>
+        `;
+    } else if (tripDay === 8) {
+        plan.innerHTML = `
+            <h3>📍 今日行程</h3>
+            <p>七天東京生日之旅已經結束 ❤️</p>
+        `;
+    } else {
+        plan.innerHTML = `
+            <h3>📍 今日行程</h3>
+            <p>${dailyPlans[tripDay - 1]}</p>
+            <button type="button" onclick="showDay('12/${String(tripDay + 5).padStart(2, '0')}')">
+                📅 查看今日詳細行程
+            </button>
+        `;
+    }
+}
+
+updateSmartHomePlan();
+// 智慧首頁：天氣查詢地點
+const weatherLocations = {
+    tokyo: {
+        name: "東京",
+        latitude: 35.6762,
+        longitude: 139.6503
+    },
+    karuizawa: {
+        name: "輕井澤",
+        latitude: 36.3483,
+        longitude: 138.5969
+    }
+};
+
+// 根據旅行日期選擇當天目的地
+function getTodayWeatherLocation() {
+    const tripDay = getTripDay();
+
+    if (tripDay === 4) {
+        return weatherLocations.karuizawa;
+    }
+
+    return weatherLocations.tokyo;
+}
+// 測試取得東京即時天氣
+// 將天氣代碼轉換成中文描述
+function getWeatherDescription(code) {
+    if (code === 0) return "☀️ 晴天";
+    if (code <= 3) return "⛅ 多雲";
+    if (code <= 48) return "🌫️ 有霧";
+    if (code <= 67) return "🌧️ 下雨";
+    if (code <= 77) return "❄️ 下雪";
+    if (code <= 82) return "🌦️ 陣雨";
+    if (code <= 86) return "🌨️ 陣雪";
+    if (code <= 99) return "⛈️ 雷雨";
+
+    return "🌤️ 天氣未知";
+}
+// 根據氣溫產生穿衣建議
+function getClothingAdvice(temperature) {
+    if (temperature <= 0) {
+        return "🥶 非常寒冷：發熱衣＋保暖中層＋厚外套，搭配手套、圍巾與毛帽。";
+    }
+
+    if (temperature <= 7) {
+        return "🧣 天氣寒冷：發熱衣＋毛衣或刷毛衣＋防風厚外套。";
+    }
+
+    if (temperature <= 14) {
+        return "🧥 天氣偏冷：長袖上衣＋保暖外套，早晚注意保暖。";
+    }
+
+    return "👕 天氣較溫和：長袖上衣搭配方便穿脫的外套。";
+}
+async function testTokyoWeather() {
+    try {
+        const url =
+            "https://api.open-meteo.com/v1/forecast" +
+            "?latitude=35.6762" +
+            "&longitude=139.6503" +
+            "&current=temperature_2m,relative_humidity_2m,weather_code" +
+            "&timezone=Asia%2FTokyo";
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("天氣服務回應異常");
+        }
+
+        const data = await response.json();
+// 儲存最後一次成功取得的東京天氣
+const tokyoWeatherCache = {
+    temperature: data.current.temperature_2m,
+    weatherCode: data.current.weather_code,
+    updatedAt: new Date().toISOString()
+};
+
+localStorage.setItem(
+    "tokyoWeatherCache",
+    JSON.stringify(tokyoWeatherCache)
+);
+        const tokyoTemperature = data.current.temperature_2m;
+
+const weatherBox = document.getElementById("smart-home-weather");
+const tokyoText = weatherBox.querySelector("p");
+
+const weatherDescription =
+    getWeatherDescription(data.current.weather_code);
+
+tokyoText.textContent =
+    `東京：${weatherDescription}・${tokyoTemperature}°C`;
+
+    const clothingBox = document.getElementById("smart-home-clothing");
+const clothingText = clothingBox.querySelector("p");
+
+// 只有非輕井澤玩雪日，才使用東京氣溫
+if (getTripDay() !== 4) {
+    clothingText.textContent = getClothingAdvice(tokyoTemperature);
+}
+   } catch (error) {
+    console.error("東京天氣取得失敗：", error);
+
+const weatherBox = document.getElementById("smart-home-weather");
+const tokyoText = weatherBox.querySelector("p");
+const clothingText = document.querySelector("#smart-home-clothing p");
+
+const savedWeather = localStorage.getItem("tokyoWeatherCache");
+
+if (savedWeather) {
+    const cached = JSON.parse(savedWeather);
+
+    const description = getWeatherDescription(cached.weatherCode);
+
+    const updatedTime = new Date(cached.updatedAt).toLocaleString(
+        "zh-TW",
+        {
+            timeZone: "Asia/Tokyo",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+    tokyoText.textContent =
+        `東京：${description}・${cached.temperature}°C（離線資料，最後更新：${updatedTime} 日本時間）`;
+
+    if (getTripDay() !== 4) {
+        clothingText.textContent =
+            getClothingAdvice(cached.temperature);
+    }
+} else {
+    tokyoText.textContent =
+        "東京：暫時無法取得天氣，請確認網路連線。";
+
+    if (getTripDay() !== 4) {
+        clothingText.textContent =
+            "暫時無法提供即時穿衣建議，請依當地氣溫注意保暖。";
+    }
+}
+}}
+
+testTokyoWeather();
+// 取得當天目的地的即時氣溫
+async function loadDestinationWeather() {
+    const location = getTodayWeatherLocation();
+
+    const weatherBox = document.getElementById("smart-home-weather");
+    const destinationText = weatherBox.querySelectorAll("p")[1];
+// 只有輕井澤玩雪日才需要比較兩地天氣
+if (getTripDay() !== 4) {
+    destinationText.hidden = true;
+    return;
+}
+
+destinationText.hidden = false;
+    try {
+        const url =
+            "https://api.open-meteo.com/v1/forecast" +
+            `?latitude=${location.latitude}` +
+            `&longitude=${location.longitude}` +
+            "&current=temperature_2m,weather_code" +
+            "&timezone=Asia%2FTokyo";
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error("天氣服務回應異常");
+        }
+
+        const data = await response.json();
+
+        // 儲存目的地天氣，供離線使用
+localStorage.setItem("tokyoDestinationWeather", JSON.stringify({
+    location: location.name,
+    temperature: data.current.temperature_2m,
+    weatherCode: data.current.weather_code,
+    updatedAt: new Date().toISOString()
+}));
+
+        const weatherDescription =
+    getWeatherDescription(data.current.weather_code);
+
+destinationText.textContent =
+    `目的地（${location.name}）：${weatherDescription}・${data.current.temperature_2m}°C`;
+// 輕井澤玩雪日：使用當地氣溫提供穿衣建議
+if (getTripDay() === 4) {
+    const clothingText = document.querySelector(
+        "#smart-home-clothing p"
+    );
+
+    clothingText.textContent =
+        getClothingAdvice(data.current.temperature_2m) +
+        " ⛄ 今天要玩雪，請準備防水手套、雪褲、防滑保暖鞋及備用襪子，宇宸也要特別注意手腳保暖。";
+}
+   } catch (error) {
+    const cached = JSON.parse(
+        localStorage.getItem("tokyoDestinationWeather") || "null"
+    );
+
+    if (cached && cached.location === location.name) {
+        const description = getWeatherDescription(cached.weatherCode);
+
+        const updatedTime = new Date(cached.updatedAt).toLocaleString(
+            "zh-TW",
+            {
+                timeZone: "Asia/Tokyo",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+        destinationText.textContent =
+            `目的地（${cached.location}）：${description}・${cached.temperature}°C` +
+            `（離線資料，最後更新：${updatedTime} 日本時間）`;
+
+        if (getTripDay() === 4) {
+            const clothingText = document.querySelector(
+                "#smart-home-clothing p"
+            );
+
+            clothingText.textContent =
+                getClothingAdvice(cached.temperature) +
+                "（依最後取得的天氣資料建議）";
+        }
+    } else {
+        destinationText.textContent = "目的地：暫時無法取得天氣";
+    }
+
+    console.error("目的地天氣取得失敗：", error);
+}
+}
+
+loadDestinationWeather();
 /* 宇宸生日行程詳細資訊 */
 
 
@@ -88,13 +408,15 @@ document.getElementById("map-page").hidden = true;
 document.getElementById("tools-page").hidden = true;
     // 顯示首頁七天行程
     document.querySelector(".today").hidden = false;
-
+document.getElementById("smart-home").hidden = false;
+document.getElementById("itinerary-list").hidden = true;
 }
 /* 顯示每日行程列表 */
 function showItinerary() {
     // 先回到每日行程頁面
     goHome();
-
+document.getElementById("smart-home").hidden = true;
+document.getElementById("itinerary-list").hidden = false;
     // 再捲動到每日行程列表
     document.getElementById("itinerary-list").scrollIntoView({
         behavior: "smooth",
