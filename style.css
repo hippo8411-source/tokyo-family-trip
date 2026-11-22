@@ -666,3 +666,83 @@ border: 1px solid #ffd8a8;
 .shopping-item button:first-of-type {
     margin-left: 32px;
 }
+/* 自訂行李區塊 */
+#custom-packing {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+#custom-packing h4 {
+    margin: 0 0 8px;
+    color: #1e3a5f;
+}
+
+#custom-packing p {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+/* 新增行李輸入區 */
+#custom-packing-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+#custom-packing-name {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #d6deea;
+    border-radius: 8px;
+}
+
+#custom-packing-form button {
+    padding: 11px;
+    border-radius: 8px;
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 自訂行李項目 */
+.custom-packing-item {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #f1f5f9;
+    border-radius: 9px;
+}
+
+.custom-packing-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: #16a34a;
+}
+
+.custom-packing-item span {
+    flex: 1;
+    min-width: 100px;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+    color: #1e3a5f;
+}
+
+.custom-packing-item button {
+    padding: 6px 9px;
+    border: 1px solid #d6deea;
+    border-radius: 7px;
+    background: white;
+    color: #334155;
+    font-size: 12px;
+}

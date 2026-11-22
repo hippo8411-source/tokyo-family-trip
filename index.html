@@ -455,6 +455,23 @@
 <label><input type="checkbox"> 常備藥品</label>
 <label><input type="checkbox"> 衛生紙與濕紙巾</label>
 <label><input type="checkbox"> 保濕乳液與護唇膏</label>
+<!-- 自訂行李清單 -->
+<div id="custom-packing">
+    <h4>✏️ 自訂行李</h4>
+    <p>臨時想到要帶的物品，可以在這裡新增。</p>
+
+    <form id="custom-packing-form">
+        <input
+            type="text"
+            id="custom-packing-name"
+            placeholder="例如：宇宸的寶可夢玩偶"
+            required
+        >
+        <button type="submit">＋ 新增行李</button>
+    </form>
+
+    <div id="custom-packing-list"></div>
+</div>
 </div>
 <!-- 日本採買備忘錄 -->
 <div class="transport-card" id="shopping-card">

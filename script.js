@@ -354,12 +354,23 @@ function setupPackingList() {
 
     // 更新行李準備進度
     function updatePackingProgress() {
-        const total = checkboxes.length;
-        const completed = Array.from(checkboxes).filter(
-            checkbox => checkbox.checked
-        ).length;
+// 讀取已保存的自訂行李
+const savedCustomPacking = JSON.parse(
+    localStorage.getItem("tokyoCustomPacking") || "[]"
+);
 
-        const percent = total === 0
+// 固定行李 + 自訂行李的總數
+const total = checkboxes.length + savedCustomPacking.length;
+
+// 固定行李 + 自訂行李的完成數量
+const completed =
+    Array.from(checkboxes).filter(
+        checkbox => checkbox.checked
+    ).length +
+    savedCustomPacking.filter(
+        item => item.checked
+    ).length;
+            const percent = total === 0
             ? 0
             : Math.round(completed / total * 100);
 
@@ -369,7 +380,7 @@ function setupPackingList() {
         progressBar.max = total;
         progressBar.value = completed;
     }
-
+refreshPackingProgress = updatePackingProgress;
     checkboxes.forEach((checkbox, index) => {
         const key = 'tokyo-packing-' + index;
 
@@ -386,7 +397,7 @@ function setupPackingList() {
     // 開啟頁面時先計算一次
     updatePackingProgress();
 }
-
+let refreshPackingProgress = function () {};
 setupPackingList();
 // 日本採買備忘錄：新增與保存商品
 const shoppingForm = document.getElementById("shopping-form");
@@ -519,4 +530,114 @@ if (shoppingForm) {
     });
 
     renderShoppingItems();
+}
+// 自訂行李清單
+const customPackingForm = document.getElementById("custom-packing-form");
+const customPackingName = document.getElementById("custom-packing-name");
+const customPackingList = document.getElementById("custom-packing-list");
+
+// 讀取之前儲存的自訂行李
+let customPackingItems = JSON.parse(
+    localStorage.getItem("tokyoCustomPacking") || "[]"
+);
+
+function saveCustomPacking() {
+    localStorage.setItem(
+        "tokyoCustomPacking",
+        JSON.stringify(customPackingItems)
+    );
+}
+
+function renderCustomPacking() {
+    customPackingList.innerHTML = "";
+
+    // 自訂行李變動後，重新計算行李準備進度
+refreshPackingProgress();    
+    customPackingItems.forEach(function (item) {
+        const row = document.createElement("div");
+        row.className = "custom-packing-item";
+// 自訂行李勾選框
+const checkbox = document.createElement("input");
+checkbox.type = "checkbox";
+checkbox.checked = item.checked;
+
+checkbox.addEventListener("change", function () {
+    item.checked = checkbox.checked;
+    saveCustomPacking();
+    renderCustomPacking();
+});
+
+row.appendChild(checkbox);
+        const name = document.createElement("span");
+        name.textContent = item.name;
+
+        row.appendChild(name);
+        // 編輯自訂行李
+const editButton = document.createElement("button");
+editButton.type = "button";
+editButton.textContent = "✏️ 編輯";
+
+editButton.addEventListener("click", function () {
+    const newName = prompt("修改行李名稱：", item.name);
+
+    // 按取消就不修改
+    if (newName === null) return;
+
+    // 不允許空白名稱
+    if (!newName.trim()) {
+        alert("行李名稱不能空白！");
+        return;
+    }
+
+    item.name = newName.trim();
+
+    saveCustomPacking();
+    renderCustomPacking();
+});
+
+row.appendChild(editButton);
+        // 刪除自訂行李
+const deleteButton = document.createElement("button");
+deleteButton.type = "button";
+deleteButton.textContent = "🗑️ 刪除";
+
+deleteButton.addEventListener("click", function () {
+    if (!confirm(`確定要刪除「${item.name}」嗎？`)) {
+        return;
+    }
+
+    customPackingItems = customPackingItems.filter(
+        packingItem => packingItem.id !== item.id
+    );
+
+    saveCustomPacking();
+    renderCustomPacking();
+});
+
+row.appendChild(deleteButton);
+        customPackingList.appendChild(row);
+    });
+}
+
+if (customPackingForm) {
+    customPackingForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = customPackingName.value.trim();
+
+        if (!name) return;
+
+        customPackingItems.push({
+            id: Date.now().toString(),
+            name: name,
+            checked: false
+        });
+
+        saveCustomPacking();
+        renderCustomPacking();
+
+        customPackingForm.reset();
+    });
+
+    renderCustomPacking();
 }
