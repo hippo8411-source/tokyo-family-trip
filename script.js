@@ -208,8 +208,9 @@ async function testTokyoWeather() {
             "https://api.open-meteo.com/v1/forecast" +
             "?latitude=35.6762" +
             "&longitude=139.6503" +
-            "&current=temperature_2m,relative_humidity_2m,weather_code" +
-            "&timezone=Asia%2FTokyo";
+"&current=temperature_2m,relative_humidity_2m,weather_code,apparent_temperature" +
+"&hourly=precipitation_probability" +
+"&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset" +            "&timezone=Asia%2FTokyo";
 
         const response = await fetch(url);
 
@@ -221,6 +222,11 @@ async function testTokyoWeather() {
 // 儲存最後一次成功取得的東京天氣
 const tokyoWeatherCache = {
     temperature: data.current.temperature_2m,
+    apparentTemperature: data.current.apparent_temperature,
+precipitationProbability: data.hourly.precipitation_probability[data.hourly.time.indexOf(data.current.time.slice(0, 13) + ":00")],    maxTemperature: data.daily.temperature_2m_max[0],
+    minTemperature: data.daily.temperature_2m_min[0],
+    sunrise: data.daily.sunrise[0],
+    sunset: data.daily.sunset[0],
     weatherCode: data.current.weather_code,
     updatedAt: new Date().toISOString()
 };
@@ -238,8 +244,11 @@ const weatherDescription =
     getWeatherDescription(data.current.weather_code);
 
 tokyoText.textContent =
-    `東京：${weatherDescription}・${tokyoTemperature}°C`;
-
+    `東京：${weatherDescription}・${tokyoTemperature}°C\n` +
+    `🌡️ 體感溫度：${tokyoWeatherCache.apparentTemperature}°C\n` +
+    `☔ 降雨機率：${tokyoWeatherCache.precipitationProbability ?? "無資料"}%\n` +
+`🌡️ 最低／最高：${tokyoWeatherCache.minTemperature}°C / ${tokyoWeatherCache.maxTemperature}°C\n` + 
+   `🌅 日出：${tokyoWeatherCache.sunrise.slice(11)}　🌇 日落：${tokyoWeatherCache.sunset.slice(11)}`;
     const clothingBox = document.getElementById("smart-home-clothing");
 const clothingText = clothingBox.querySelector("p");
 
@@ -272,9 +281,13 @@ if (savedWeather) {
         }
     );
 
-    tokyoText.textContent =
-        `東京：${description}・${cached.temperature}°C（離線資料，最後更新：${updatedTime} 日本時間）`;
-
+tokyoText.textContent =
+    `東京：${description}・${cached.temperature}°C\n` +
+    `🌡️ 體感溫度：${cached.apparentTemperature ?? "無資料"}°C\n` +
+    `☔ 降雨機率：${cached.precipitationProbability ?? "無資料"}%\n` +
+`🌡️ 最低／最高：${cached.minTemperature ?? "無資料"}°C / ${cached.maxTemperature ?? "無資料"}°C\n` +
+    `🌅 日出：${cached.sunrise?.slice(11) ?? "無資料"}　🌇 日落：${cached.sunset?.slice(11) ?? "無資料"}\n` +
+    `（離線資料，最後更新：${updatedTime} 日本時間）`;
     if (getTripDay() !== 4) {
         clothingText.textContent =
             getClothingAdvice(cached.temperature);
@@ -309,8 +322,9 @@ destinationText.hidden = false;
             "https://api.open-meteo.com/v1/forecast" +
             `?latitude=${location.latitude}` +
             `&longitude=${location.longitude}` +
-            "&current=temperature_2m,weather_code" +
-            "&timezone=Asia%2FTokyo";
+"&current=temperature_2m,weather_code,apparent_temperature" +
+"&hourly=precipitation_probability" +
+"&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset" +            "&timezone=Asia%2FTokyo";
 
         const response = await fetch(url);
 
@@ -324,15 +338,28 @@ destinationText.hidden = false;
 localStorage.setItem("tokyoDestinationWeather", JSON.stringify({
     location: location.name,
     temperature: data.current.temperature_2m,
+    apparentTemperature: data.current.apparent_temperature,
+    precipitationProbability: data.hourly.precipitation_probability[
+        data.hourly.time.indexOf(data.current.time.slice(0, 13) + ":00")
+    ],
+    maxTemperature: data.daily.temperature_2m_max[0],
+    minTemperature: data.daily.temperature_2m_min[0],
+    sunrise: data.daily.sunrise[0],
+    sunset: data.daily.sunset[0],
     weatherCode: data.current.weather_code,
     updatedAt: new Date().toISOString()
 }));
-
         const weatherDescription =
     getWeatherDescription(data.current.weather_code);
 
 destinationText.textContent =
-    `目的地（${location.name}）：${weatherDescription}・${data.current.temperature_2m}°C`;
+    `目的地（${location.name}）：${weatherDescription}・${data.current.temperature_2m}°C\n` +
+    `🌡️ 體感溫度：${data.current.apparent_temperature}°C\n` +
+    `☔ 降雨機率：${data.hourly.precipitation_probability[
+        data.hourly.time.indexOf(data.current.time.slice(0, 13) + ":00")
+    ] ?? "無資料"}%\n` +
+`🌡️ 最低／最高：${data.daily.temperature_2m_min[0]}°C / ${data.daily.temperature_2m_max[0]}°C\n` +
+    `🌅 日出：${data.daily.sunrise[0].slice(11)}　🌇 日落：${data.daily.sunset[0].slice(11)}`;
 // 輕井澤玩雪日：使用當地氣溫提供穿衣建議
 if (getTripDay() === 4) {
     const clothingText = document.querySelector(
@@ -362,10 +389,13 @@ if (getTripDay() === 4) {
             }
         );
 
-        destinationText.textContent =
-            `目的地（${cached.location}）：${description}・${cached.temperature}°C` +
-            `（離線資料，最後更新：${updatedTime} 日本時間）`;
-
+destinationText.textContent =
+    `目的地（${cached.location}）：${description}・${cached.temperature}°C\n` +
+    `🌡️ 體感溫度：${cached.apparentTemperature ?? "無資料"}°C\n` +
+    `☔ 降雨機率：${cached.precipitationProbability ?? "無資料"}%\n` +
+`🌡️ 最低／最高：${cached.minTemperature ?? "無資料"}°C / ${cached.maxTemperature ?? "無資料"}°C\n` +
+    `🌅 日出：${cached.sunrise?.slice(11) ?? "無資料"}　🌇 日落：${cached.sunset?.slice(11) ?? "無資料"}\n` +
+    `（離線資料，最後更新：${updatedTime} 日本時間）`;
         if (getTripDay() === 4) {
             const clothingText = document.querySelector(
                 "#smart-home-clothing p"

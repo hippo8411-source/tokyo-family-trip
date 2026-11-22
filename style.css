@@ -746,3 +746,8 @@ border: 1px solid #ffd8a8;
     color: #334155;
     font-size: 12px;
 }
+/* V4.1 天氣資訊換行設定 */
+#smart-home-weather p {
+    white-space: pre-line;
+    line-height: 1.8;
+}
